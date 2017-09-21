@@ -1,0 +1,12 @@
+app:
+    resource: '@AppBundle/Controller/Web'
+    type: annotation
+app.swagger_ui:
+    resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+    prefix:   /api/doc
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+api:
+    resource: routing_api.yml
+    type: rest
+    prefix: /api

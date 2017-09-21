@@ -1,0 +1,11 @@
+user:
+   resource: AppBundle\Controller\Api\UserController
+   type: rest
+#api_login_  check:
+#    path: /login_check
+login:
+    type: rest
+    resource: AppBundle\Controller\Api\LoginController
+budget:
+    type: rest
+    resource: AppBundle\Controller\Api\BudgetController
