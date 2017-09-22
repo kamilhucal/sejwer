@@ -25,7 +25,7 @@ class BudgetRepository extends EntityRepository
                 ->setParameter('user', $user->getId())
                 ->setParameter('isActive', true)
                 ->getQuery()
-                ->getResult();
+                ->getOneOrNullResult();
 
     }
 
