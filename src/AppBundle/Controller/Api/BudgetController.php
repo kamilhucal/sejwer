@@ -248,6 +248,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
         if (!$budget) {
             return $this->view('active.budget.not_found', 400);
         }
+        $budget->setUser(null);
         return $this->view($budget, 200);
 
     }
@@ -326,28 +327,114 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
     }
 
 
-    public function putAction($id)
+    /**
+     *
+     * @SWG\Parameter(
+     *     name="Authorization",
+     *     required=true,
+     *     type="string",
+     *     description="Authorization header needs to have a value of a string: <strong>Bearer Token</strong> - Try It Out to see an example",
+     *     default="Bearer eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcm5hbWUiOiJhZG1pbkB3cC5wbCIsImlhdCI6MTUwNTkwNjI5NSwiZXhwIjoxNTA2NDA2Mjk1fQ.iRBoElxVmCj0zlFcwh-cpi-RbeufZm1TnI2HxF0U6V66bgsVudLIvqmMBK2eO8AChdk_IZDVdVRoOgZk-kV3Zah0ClP8rbHvuzk4cwI40et3bbyGNU-IHlmMFpjyLggoq9wDuy3zTwtZuJ8Ux8JEw4CWllv1F4zUe0fja9J9ZgOEGYXVs8b1qF-UzkfU0KUMKiaESEah3n7UR0Gi94B6HQRJh9fWWPYkpr-itV68wZl0z3ZPUoJVYxA9D_vz7SZy-TWieYF1qlc9GrhRS8DFaElz43m_w1DOtcud7RBoVorwh4CYw5VfLp4hraWzCmywsyHipp7a4ErvBOoXFHKfoVrGrvO2O7zVrsCU58AQH7yv1LPv3_UsTLWrdYd7G3AuQrEgtxLX711popz3DeRukdvGCvcbP8v0IzJ-8xs0jVCooyFxtwc_tcav8-liptHJHEdTB23AfHhZ_QTTYuflrpv8wZV5XMO-KzX8zfVmCaN5CXJLU-eXCzMiTMUENZACol4tU6LkQ3gNyxi9oFpalxeamb_nsaWI7EszooFs9cvPNZtXnyGGkMi0bAkdgbxA5EBdrvPnThiU0bMabzVqzKBarKJyLeCURZo9kdIQ2rUVX9qLnEJV28Vx5d1usG9oTyJ1rj_qDdqaoruxSSR17VKBI7blJMlJgbfqy2lOqzs",
+     *     in="header",
+     * )
+     * @SWG\Response(
+     *     response=422,
+     *     description="In case of incorrect data passed, response with the error message",
+     *     examples={"application/json":{"Error": "Incorrect Form-Data: ERROR: ExpiredAt cannot be blank"}}
+     *  )
+     * @SWG\Response (
+     *      response=200,
+     *      description="Success response - edited budget of requested ID",
+     *      examples={"application/json":{"Bug"}}
+     *     )
+     * @SWG\Response(
+     *     response=400,
+     *     description="In case of nonexistent budget of requested ID, response with and error message",
+     *     examples={"application/json":{"No budget of ID: 5"}}
+     *  )
+     * @SWG\Parameter(
+     *      name="id",
+     *      type="integer",
+     *      in="path",
+     *      description="Value of requested budget's Id.<br><br> Returns the budget only if <strong>logged user is its owner</strong>"
+     *
+     *  )
+     * @SWG\Tag(name="budget"),
+     *
+     * @param  $id int
+     * @param $request Request
+     * @return View
+     */
+    public function putAction($id, Request $request)
     {
 
-    }
+        $value = $request->get('value');
+        $name = $request->get('name');
+        $createdAt = $request->get('created_at');
 
+
+        $budget = $this->getBudgetRepository()->find($id);
+        if(!$budget) {
+            return $this->view('budget.of.id.not_found: ' . $id, 400);
+        }
+
+
+        $form = $this->createForm(BudgetType::class, $budget, ['csrf_protection' => false]);
+        $form->submit($request->request->all());
+
+        if(!$form->isValid()){
+            return $this->view($form->getErrors(true),422);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+
+        $budget->setUser(null);
+
+        return $this->view($budget, 200);
+
+    }
+    /**
+     *
+     * @SWG\Parameter(
+     *     name="Authorization",
+     *     required=true,
+     *     type="string",
+     *     description="Authorization header needs to have a value of a string: <strong>Bearer Token</strong> - Try It Out to see an example",
+     *     default="Bearer eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcm5hbWUiOiJhZG1pbkB3cC5wbCIsImlhdCI6MTUwNTkwNjI5NSwiZXhwIjoxNTA2NDA2Mjk1fQ.iRBoElxVmCj0zlFcwh-cpi-RbeufZm1TnI2HxF0U6V66bgsVudLIvqmMBK2eO8AChdk_IZDVdVRoOgZk-kV3Zah0ClP8rbHvuzk4cwI40et3bbyGNU-IHlmMFpjyLggoq9wDuy3zTwtZuJ8Ux8JEw4CWllv1F4zUe0fja9J9ZgOEGYXVs8b1qF-UzkfU0KUMKiaESEah3n7UR0Gi94B6HQRJh9fWWPYkpr-itV68wZl0z3ZPUoJVYxA9D_vz7SZy-TWieYF1qlc9GrhRS8DFaElz43m_w1DOtcud7RBoVorwh4CYw5VfLp4hraWzCmywsyHipp7a4ErvBOoXFHKfoVrGrvO2O7zVrsCU58AQH7yv1LPv3_UsTLWrdYd7G3AuQrEgtxLX711popz3DeRukdvGCvcbP8v0IzJ-8xs0jVCooyFxtwc_tcav8-liptHJHEdTB23AfHhZ_QTTYuflrpv8wZV5XMO-KzX8zfVmCaN5CXJLU-eXCzMiTMUENZACol4tU6LkQ3gNyxi9oFpalxeamb_nsaWI7EszooFs9cvPNZtXnyGGkMi0bAkdgbxA5EBdrvPnThiU0bMabzVqzKBarKJyLeCURZo9kdIQ2rUVX9qLnEJV28Vx5d1usG9oTyJ1rj_qDdqaoruxSSR17VKBI7blJMlJgbfqy2lOqzs",
+     *     in="header",
+     * )
+     * @SWG\Response (
+     *      response=200,
+     *      description="Success response - deletes budget of requested ID",
+     *      examples={"application/json":{"Bug"}}
+     *     )
+     * @SWG\Response(
+     *     response=400,
+     *     description="In case of nonexistent budget of requested ID, response with and error message",
+     *     examples={"application/json":{"No budget of ID: 5"}}
+     *  )
+     * @SWG\Parameter(
+     *      name="id",
+     *      type="integer",
+     *      in="path",
+     *      description="Value of requested budget's Id.<br><br> Deletes the budget only if <strong>logged user is its owner</strong>"
+     *
+     *  )
+     * @SWG\Tag(name="budget"),
+     *
+     */
     public function deleteAction($id)
     {
+            $budget = $this->getBudgetRepository()->findByUserAndById($id, $this->getUser());
+            if(!$budget) {
+                return $this->view('budget.of.id.not_found: ' . $id, 400);
+            }
 
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($budget);
+            $em->flush();
 
-    }
-
-
-    /**
-     * @param $date string
-     * @return boolean returns true when expired, false otherwise
-     */
-    private function isExpired($date)
-    {
-        /**
-         * @var boolean
-         */
-        return (new \DateTime($date) < new \DateTime());
+            return $this->view('budget.removed.of.id: '.$id);
     }
 
 
@@ -358,7 +445,6 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
 
     private function deactivatePreviousBudgets()
     {
-
         /**
          * @var $budgets Budget[]
          */
