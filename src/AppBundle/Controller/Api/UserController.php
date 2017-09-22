@@ -43,14 +43,8 @@ class UserController extends FOSRestController implements ClassResourceInterface
      *  )
      *  @SWG\Response (
      *      response=201,
-     *      description="Success response - Receiving JWT Token, for future validation",
-     *      examples={"application/json" : {"token": "eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcm5hbWUiOiJhZG1pbkB3cC5wbCIsImlhdCI6MTUwNTg5ODI4OCwiZXhwIjoxNTA2Mzk4Mjg4fQ.IJlxMu-dDXEy9wW_JDEWzgFTDfpFd3Oe2IUl-jXXT_vDiB6MQx4d0mOVbC3K16_nWyVc3qjtLoWLn48QHdHiedIvwf_MY_W3zFs3JQXJ5aJdcAGDu1Zks8n3D6x22M1kxwJ0erXlS8dRUwQmeeYElhMJrVymyKUsMA1yxDFOrC7f-8wCvIDVgPNckkji6DiC3i5eVcK7GQ1PYxgx-be2TU7KrPaMqbI1DOeBaxUOAx5xRbslQPMTDuerrrTjFh9fHmUzwYw_wNDBYeb3ZxwBwov4fG00frhb1axUJvZY28fpvX5Z1dd26z_0ScxTKP4NbObaZ-eHvRBzPAb4xiE-fVXXO-V4iLqfnWPXQjB7tXTK_mVp40OjQdzWW1Oj0hZbfyBvn7duP3pn-jBy9hISxd_jAjkWXASZL9NuN1PxvQtvW92vTmcFBEIBTvIl6zIIqb1XBY3_qoAa0XCr6IhOf1KHqFmLLsRBhqulYfY5O8-8lrIsafMfECQ5hmD0ec3U6SLQadPeH4OCAboFPSqKWPzN4kz7ii-9KPrxQW8kwCH-8yxdb8pxmMmmKaUXZiJQfB1edlbWflj7ZzoObARq9Yeubk0b6Qm7fsaTLIzBId4RQdjdXuscG_FbzkkZWAa54YwROcKQGAcZB8quNJK-wWvEeLoUup0SQ6BgrU57fdo"}},
-     *      @SWG\Schema (
-     *          @SWG\Property(
-     *          type="string",
-     *          property="token"
-     *          ),
-     *      ),
+     *      description="Success response",
+     *      examples={"application/json" : { "msg": "Your account has been created successfully."}},
      *  ),
      *  @SWG\Response(
      *     response=400,

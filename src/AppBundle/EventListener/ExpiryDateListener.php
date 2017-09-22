@@ -47,9 +47,8 @@ class ExpiryDateListener implements EventSubscriberInterface
 
     /**
      * @param UserEvent $event
-     * @param EntityManager $entityManager
      */
-    public function expiration(UserEvent $event, EntityManager $entityManager)
+    public function expiration(UserEvent $event)
     {
         $user = $event->getUser();
         if(!$user){
