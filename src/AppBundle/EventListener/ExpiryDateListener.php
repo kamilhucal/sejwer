@@ -15,7 +15,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 
-
+/**
+ * Checks if the logged in user's budgets is still active due to expiry date
+ */
 class ExpiryDateListener implements EventSubscriberInterface
 {
 

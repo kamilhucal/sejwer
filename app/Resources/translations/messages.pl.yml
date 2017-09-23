@@ -1,0 +1,16 @@
+budgets:
+    not_found: 'Brak Budzetów'
+
+budget:
+    post:
+        request_empty: 'Wysłany Formularz jest pusty'
+        form_error: 'Formularz jest niepoprawny'
+    created_successfully: 'Pomyślnie stworzono budżet'
+    not_found:
+        active: 'Brak aktywnego budżetu'
+        id: 'Brak budżetu od ID'
+    removed_successfully:
+        id: 'Pomyślnie usunięto budżet o ID'
+
+
+

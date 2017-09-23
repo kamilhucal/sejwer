@@ -82,7 +82,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
 
 
         if (!$budgets) {
-            return $this->view('No Budgets Found', Response::HTTP_NO_CONTENT);
+                return $this->view($this->get('translator')->trans('budgets.not_found'), Response::HTTP_NO_CONTENT);
         }
 
         foreach ($budgets as $budget) {
@@ -184,7 +184,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
         $postData = $request->request->all();
 
         if (!$postData) {
-            return new View('post.request_empty', 406);
+            return new View('budget.post.request_empty', 406);
         }
 
 
@@ -195,7 +195,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
 
         if (!$form->isValid()) {
 
-            return $this->view('Incorrect Form-Data: ' . $form->getErrors(true), 422);
+            return $this->view($this->get('translator')->trans('budget.post.form_error').': ' . $form->getErrors(true), 422);
         }
 
         /**
@@ -215,7 +215,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
         $em->flush();
 
 
-        return $this->view('budget.created_successfully', Response::HTTP_CREATED);
+        return $this->view($this->get('translator')->trans('budget.created_successfully'), Response::HTTP_CREATED);
 
     }
 
@@ -291,7 +291,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
     {
         $budget = $this->getBudgetRepository()->findByActiveBudgetAndByUser($this->getUser());
         if (!$budget) {
-            return $this->view('active.budget.not_found', 400);
+            return $this->view($this->get('translator')->trans('budget.not_found.active'), 400);
         }
         $budget->setUser(null);
         return $this->view($budget, 200);
@@ -367,7 +367,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
             $budget->setUser(null);
             return $this->view($budget, 200);
         }
-        return $this->view('budget.of.id.not_found: ' . $id, 400);
+        return $this->view($this->get('translator')->trans('budget.not_found.id').': ' . $id, 400);
 
     }
 
@@ -440,14 +440,9 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
     public function putAction($id, Request $request)
     {
 
-        $value = $request->get('value');
-        $name = $request->get('name');
-        $createdAt = $request->get('created_at');
-
-
         $budget = $this->getBudgetRepository()->find($id);
         if(!$budget) {
-            return $this->view('budget.of.id.not_found: ' . $id, 400);
+            return $this->view($this->get('translator')->trans('budget.not_found.id').': ' . $id, 400);
         }
 
 
@@ -499,14 +494,14 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
     {
             $budget = $this->getBudgetRepository()->findByUserAndById($id, $this->getUser());
             if(!$budget) {
-                return $this->view('budget.of.id.not_found: ' . $id, 400);
+                return $this->view($this->get('translator')->trans('budget.not_found.id').': ' . $id, 400);
             }
 
             $em = $this->getDoctrine()->getManager();
             $em->remove($budget);
             $em->flush();
 
-            return $this->view('budget.removed.of.id: '.$id);
+            return $this->view($this->get('translator')->trans('budget.removed_successfully').': '.$id);
     }
 
 

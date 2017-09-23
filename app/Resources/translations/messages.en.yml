@@ -1,0 +1,16 @@
+budgets:
+    not_found: 'No Budgets Found'
+
+budget:
+    post:
+        request_empty: 'POST body is empty'
+        form_error: 'POST body is incorrect'
+    created_successfully: 'Budget created sucessfully'
+    not_found:
+        active: 'No Active Budget'
+        id: 'No budget with Id of'
+    removed_successfully:
+        id: 'Successfully deleted budget of id of'
+
+
+
