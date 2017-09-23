@@ -17,7 +17,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\Validator\Constraints\Date;
 
 /**
- * @Rest\Route(requirements={"_format"="json|xml"},)
+ * @Rest\Route(requirements={"_format"="json"},)
  * @Rest\RouteResource("Budget", pluralize=false)
  */
 class BudgetController extends FOSRestController implements ClassResourceInterface

@@ -11,6 +11,13 @@ budget:
         id: 'No budget with Id of'
     removed_successfully:
         id: 'Successfully deleted budget of id of'
+expense:
+    not_found: 'No Expense of Id of'
+    post:
+      unsuccessful: 'Formularz Niekompletny'
+expenses:
+    not_found: 'No Expenses found'
+
 
 
 

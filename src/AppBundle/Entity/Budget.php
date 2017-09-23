@@ -60,7 +60,7 @@ class Budget
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User");
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="budgets");
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $user;
@@ -126,15 +126,13 @@ class Budget
         $this->value = $value;
     }
 
-
-
-//    /**
-//     * @return User
-//     */
-//    public function getUser(): User
-//    {
-//        return $this->user;
-//    }
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 
     /**
      * @param mixed $user

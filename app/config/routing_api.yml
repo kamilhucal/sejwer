@@ -9,3 +9,6 @@ login:
 budget:
     type: rest
     resource: AppBundle\Controller\Api\BudgetController
+expense:
+    type: rest
+    resource: AppBundle\Controller\Api\ExpenseController

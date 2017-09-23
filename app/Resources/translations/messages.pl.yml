@@ -11,6 +11,12 @@ budget:
         id: 'Brak budżetu od ID'
     removed_successfully:
         id: 'Pomyślnie usunięto budżet o ID'
+expenses:
+    not_found: 'Brak wydatków'
+expense:
+    not_found: 'Brak wydatku o Id'
+    post:
+      unsuccessful: 'Incorrect Form'
 
 
 

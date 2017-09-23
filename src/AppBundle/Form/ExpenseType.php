@@ -13,7 +13,7 @@ class ExpenseType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('value')->add('commentary')->add('createdAt')->add('budget');
+        $builder->add('name')->add('value')->add('commentary')->add('createdAt');
     }
     
     /**
