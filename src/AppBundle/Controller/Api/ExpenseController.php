@@ -49,13 +49,17 @@ class ExpenseController extends FOSRestController implements ClassResourceInterf
         return $this->view($budgetsExpenses, 200);
     }
 
+    /**
+     * @param $id
+     * @return \FOS\RestBundle\View\View
+     */
     public function getAction($id)
     {
         $expense = $this->getExpenseRepository()->find($id);
 
         $user = $this->getUser();
 
-        if (!$expense) {
+        if (!$expense || !$expense->getBudget()) {
             return $this->view(['error' => $this->get('translator')->trans('expense.not_found') . ': id'], 400);
         }
 
@@ -88,13 +92,41 @@ class ExpenseController extends FOSRestController implements ClassResourceInterf
         return $this->view($this->get('translator')->trans('expense.created'),200);
     }
 
-    public function putAction()
+    public function putAction($id, Request $request)
     {
+        $expense = $this->getExpenseRepository()->find($id);
+        if (!$expense || !$expense->getBudget()) {
+            return $this->view(['error' => $this->get('translator')->trans('expense.not_found') . ': id'], 400);
+        }
 
+        if ($expense->getBudget()->getUser()->getId() !== $this->getUser()->getId()) {
+            return $this->view(['error' => $this->get('translator')->trans('expense.not_found') . ': id'], 400);
+        }
+
+
+        $form = $this->createForm(ExpenseType::class, $expense, ['csrf_protection' => false]);
+        $form->submit($request->request->all());
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+
+        return $this->view($this->get('translator')->trans('expense.updated'), 200);
     }
 
-    public function deleteAction()
+    public function deleteAction($id)
     {
+        $expense = $this->getExpenseRepository()->find($id);
+        if (!$expense || !$expense->getBudget()) {
+            return $this->view(['error' => $this->get('translator')->trans('expense.not_found') . ': id'], 400);
+        }
+
+        if ($expense->getBudget()->getUser()->getId() !== $this->getUser()->getId()) {
+            return $this->view(['error' => $this->get('translator')->trans('expense.not_found') . ': id'], 400);
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($expense);
+        $entityManager->flush();
+
+        return $this->view($this->get('translator')->trans('expense.deleted'), 200);
 
     }
 
