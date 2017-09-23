@@ -17,6 +17,7 @@ expense:
     not_found: 'Brak wydatku o Id'
     post:
       unsuccessful: 'Incorrect Form'
+created: 'messages'
 
 
 

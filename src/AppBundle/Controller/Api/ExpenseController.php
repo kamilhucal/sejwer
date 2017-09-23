@@ -85,7 +85,7 @@ class ExpenseController extends FOSRestController implements ClassResourceInterf
         $entityManager->persist($expense);
         $entityManager->flush();
 
-        return $this->routeRedirectView('get_expense',['id' =>$expense->getId()],200);
+        return $this->view($this->get('translator')->trans('expense.created'),200);
     }
 
     public function putAction()
