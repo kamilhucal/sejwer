@@ -152,8 +152,6 @@ class ExpenseController extends FOSRestController implements ClassResourceInterf
         if ($expense->getBudget()->getUser()->getId() !== $this->getUser()->getId()) {
             return $this->view(['error' => $this->get('translator')->trans('expense.not_found') . ': id'], 400);
         }
-
-
         $form = $this->createForm(ExpenseType::class, $expense, ['csrf_protection' => false]);
         $form->submit($request->request->all());
         $entityManager = $this->getDoctrine()->getManager();
