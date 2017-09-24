@@ -18,6 +18,8 @@ expense:
     post:
       unsuccessful: 'Formularz Niekompletny'
     create: 'messages'
+    updated: 'messages'
+    deleted: 'messages'
 created: 'messages'
 
 

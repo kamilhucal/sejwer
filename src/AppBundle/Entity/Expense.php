@@ -50,7 +50,7 @@ class Expense
     /**
      * @var \DateTime
      * @Assert\NotBlank(message="expense.created.at_empty")
-     * @Assert\LessThanOrEqual("today")
+     * @Assert\GreaterThanOrEqual("today")
      * @ORM\Column(name="created_at", type="date");
      */
     private $createdAt;

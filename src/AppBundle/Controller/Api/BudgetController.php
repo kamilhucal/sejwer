@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\Budget;
+use DateTime;
 use AppBundle\Entity\User;
 use AppBundle\Form\BudgetType;
 use Doctrine\ORM\EntityManager;
@@ -13,8 +14,6 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Swagger\Annotations as SWG;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Rest\Route(requirements={"_format"="json"},)
@@ -22,7 +21,6 @@ use Symfony\Component\Validator\Constraints\Date;
  */
 class BudgetController extends FOSRestController implements ClassResourceInterface
 {
-
 
     /**
      * @SWG\Parameter(
@@ -82,7 +80,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
 
 
         if (!$budgets) {
-                return $this->view($this->get('translator')->trans('budgets.not_found'), Response::HTTP_NO_CONTENT);
+            return $this->view($this->get('translator')->trans('budgets.not_found'), Response::HTTP_NO_CONTENT);
         }
 
         foreach ($budgets as $budget) {
@@ -90,7 +88,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
         }
 
         $user = new User();
-        return new View($budgets, 200);
+        return $this->view($budgets, 200);
 
 
     }
@@ -104,7 +102,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *     default="Bearer eyJhbGciOiJSUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcm5hbWUiOiJhZG1pbkB3cC5wbCIsImlhdCI6MTUwNjEwMjIzNywiZXhwIjoxNTA2NjAyMjM3fQ.MkAhvJj4NsABDvlWL559mSU-ocb-QBS5jIjGaTaJC8QuBifwYSZRwjnPdoEuUQRDPzoTMwiSv6EpxHMeYSK55PtC7q5VDbZlK95lxUCtv-_7-kws-hIYKNWdyMAfWAgg2uhvFPLj15H0V22rS6gpCORtVQKrN_KV2v568C6_KhOq0AxBwOV3M5dC-wJPZ0pzFV59iTynP1rrtFlB7jLHHkL42xhb8TTDIsXmd3sg1NX4h3tIqjkvuP8RTkFmVKWnfijDQh5PN8e5myYHOiB9e5QtVhgp7m-f43e0wydxOZhzSwNXwR00OfBDNTHDf3lG69ten4Pq2o06b1WKr75rJ6ajo3jF56CumDVAGcgThSyGuLdK2drnp5EhOiv_CS8KIQGDuccE2fdhxZDI7teyqFcwiQT0ySTXNxnF0ehtOmnykHH-Tugbd-3UvJNuRGVm0lMAM4-9Dscis4ui2R9Y6qdJjcOenArFJn1u-7AAqLF2Dw8ehHWTopgfyizjHNMCrAxuomadDYGL88VxWoVO_tkaraRNPctgCOaYsNprVjiN71tBhxH7B7ayaiMaLQFofFYuh7ZXNVzXxwLDCcwEByZAHlEeFbwZuhPXrc1C5r-jyMR7iWDAgoIx7qvOwHySUcKzQOaX7ehioPj0pdMVoU_3NBMw7JUxAXYg_j8a-LQ",
      *     in="header",
      *)
-     *  @SWG\Parameter(
+     * @SWG\Parameter(
      *     name="Budget Data",
      *     in="body",
      *     description="Creates new budget",
@@ -195,7 +193,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
 
         if (!$form->isValid()) {
 
-            return $this->view($this->get('translator')->trans('budget.post.form_error').': ' . $form->getErrors(true), 422);
+            return $this->view($this->get('translator')->trans('budget.post.form_error') . ': ' . $form->getErrors(true), 422);
         }
 
         /**
@@ -367,7 +365,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
             $budget->setUser(null);
             return $this->view($budget, 200);
         }
-        return $this->view($this->get('translator')->trans('budget.not_found.id').': ' . $id, 400);
+        return $this->view($this->get('translator')->trans('budget.not_found.id') . ': ' . $id, 400);
 
     }
 
@@ -383,7 +381,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *     in="header",
      * )
      *
-     *  @SWG\Parameter(
+     * @SWG\Parameter(
      *     name="Budget Data",
      *     in="body",
      *     description="Creates new budget",
@@ -440,26 +438,35 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
     public function putAction($id, Request $request)
     {
 
+        //TODO: CHECK WHAT HAPPENS WHEN EDIT FOR FUTURE DATE (active
+
         $budget = $this->getBudgetRepository()->find($id);
-        if(!$budget) {
-            return $this->view($this->get('translator')->trans('budget.not_found.id').': ' . $id, 400);
+        if (!$budget) {
+            return $this->view($this->get('translator')->trans('budget.not_found.id') . ': ' . $id, 400);
         }
 
 
         $form = $this->createForm(BudgetType::class, $budget, ['csrf_protection' => false]);
         $form->submit($request->request->all());
 
-        if(!$form->isValid()){
-            return $this->view($form->getErrors(true),422);
+
+        if (!$form->isValid()) {
+            return $this->view($form->getErrors(true), 422);
+        }//TODO: FINISH THIS
+        $createdAt = new Datetime($request->request->get('createdAt'));
+        if(!$this->isExpired($createdAt)){
+            $this->deactivatePreviousBudgets();
+            $budget->setIsActive(true);
         }
         $em = $this->getDoctrine()->getManager();
         $em->flush();
 
         $budget->setUser(null);
 
-        return $this->view($budget, 200);
+        return $this->view($createdAt, 200);
 
     }
+
     /**
      *
      * @SWG\Parameter(
@@ -492,16 +499,16 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      */
     public function deleteAction($id)
     {
-            $budget = $this->getBudgetRepository()->findByUserAndById($id, $this->getUser());
-            if(!$budget) {
-                return $this->view($this->get('translator')->trans('budget.not_found.id').': ' . $id, 400);
-            }
+        $budget = $this->getBudgetRepository()->findByUserAndById($id, $this->getUser());
+        if (!$budget) {
+            return $this->view($this->get('translator')->trans('budget.not_found.id') . ': ' . $id, 400);
+        }
 
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($budget);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($budget);
+        $em->flush();
 
-            return $this->view($this->get('translator')->trans('budget.removed_successfully').': '.$id);
+        return $this->view($this->get('translator')->trans('budget.removed_successfully') . ': ' . $id);
     }
 
 
@@ -513,23 +520,35 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
     private function deactivatePreviousBudgets()
     {
         /**
+         * @var $em EntityManager
+         */
+        $em = $this->getDoctrine()->getManager();
+
+        /**
          * @var $budgets Budget[]
          */
-        $budgets = $this->getBudgetRepository()->findByActiveBudgetAndByUser($this->getUser());
+        $budgets = $this->getBudgetRepository()->findByActiveBudgetsAndByUser($this->getUser());
 
         if ($budgets) {
-
-            /**
-             * @var $em EntityManager
-             */
-            $em = $this->getDoctrine()->getManager();
-
             foreach ($budgets as $budget) {
                 $budget->setIsActive(false);
+                $budget->setExpiredAt(new DateTime('now'));
                 $em->persist($budget);
             }
-
             $em->flush();
         }
     }
+
+    /**
+     * @param $date
+     * @return bool True when Date is past the expiry date
+     */
+    private function isExpired($date)
+    {
+        /**
+         * @var boolean
+         */
+        return ($date < new \DateTime());
+    }
+
 }

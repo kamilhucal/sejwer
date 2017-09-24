@@ -29,6 +29,18 @@ class BudgetRepository extends EntityRepository
 
     }
 
+    public function findByActiveBudgetsAndByUser($user)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.user = :user')
+            ->andWhere('u.isActive = :isActive')
+            ->setParameter('user', $user->getId())
+            ->setParameter('isActive', true)
+            ->getQuery()
+            ->getResult();
+
+    }
+
     /**
      * @param $id int
      * @param $user User

@@ -53,7 +53,7 @@ class ExpiryDateListener implements EventSubscriberInterface
     public function expiration(UserEvent $event)
     {
         $user = $event->getUser();
-        if(!$user){
+        if (!$user) {
             return;
         }
         $this->expiryBudgetDateResolver($user);
@@ -65,7 +65,7 @@ class ExpiryDateListener implements EventSubscriberInterface
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
-        if(!$user){
+        if (!$user) {
             return;
         }
         $this->expiryBudgetDateResolver($user);
@@ -78,12 +78,12 @@ class ExpiryDateListener implements EventSubscriberInterface
     public function onRequest()
     {
         $token = $this->tokenStorage->getToken();
-        if(!$token){
+        if (!$token) {
             return;
         }
-
         $user = $token->getUser();
-        if(!$user){
+
+        if ($user === "anon.") {
             return;
         }
         $this->expiryBudgetDateResolver($user);
@@ -94,18 +94,22 @@ class ExpiryDateListener implements EventSubscriberInterface
      * @param $user
      * Finding if the active budgets is past the expiry date, and deactivates it.
      */
-    private function expiryBudgetDateResolver($user){
+    private function expiryBudgetDateResolver($user)
+    {
 
-        $activeBudget = $this->entityManager->getRepository('AppBundle:Budget')->findByActiveBudgetAndByUser($user);
-        if ($activeBudget) {
-            if ($this->isExpired($activeBudget->getExpiredAt())) {
-                $activeBudget->setIsActive(false);
-            };
-            $this->entityManager->persist($activeBudget);
+        $activeBudgets = $this->entityManager->getRepository('AppBundle:Budget')->findByActiveBudgetsAndByUser($user);
+        if ($activeBudgets) {
+            foreach($activeBudgets as $activeBudget){
+                if ($this->isExpired($activeBudget->getExpiredAt())) {
+                    $activeBudget->setIsActive(false);
+                };
+                $this->entityManager->persist($activeBudget);
+
+            }
             $this->entityManager->flush();
         }
-
     }
+
     /**
      * @param $date
      * @return bool True when Date is past the expiry date
