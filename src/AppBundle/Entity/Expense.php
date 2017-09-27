@@ -50,14 +50,14 @@ class Expense
     /**
      * @var \DateTime
      * @Assert\NotBlank(message="expense.created.at_empty")
-     * @Assert\GreaterThanOrEqual("today")
+     * @Assert\LessThanOrEqual("today")
      * @ORM\Column(name="created_at", type="date");
      */
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Budget",fetch="EXTRA_LAZY",inversedBy="expenses")
-     * @ORM\JoinColumn(name="budget_id",referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Budget",inversedBy="expenses")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @var Budget
      */
     private $budget;

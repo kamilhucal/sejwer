@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<div [class.all]="isShown">
+    <div class="login">
+        <button (click)="onLogin()">login</button>
+    </div>
+    <div class="logo"><img src="{{ asset('img/logo.png') }}" height="67" width="330"/></div>
+    <div class="aboutMargin">
+        <div class="about">
+            <h1 class="aboutTitle">KONTROLUJ SWOJE WYDATKI I OSZCZĘDZAJ</h1>
+            <h3 class="aboutDescription">Sejwer pozwala Ci kontrolować wydawane przez Ciebie pieniądze. Wylicza ile zaoszczędziłeś lub ile jesteś stratny.
+                Wylicza Twoj dzienny budżet , pokazuje ile straciłeś do tej pory i jaką kwote możesz jeszcze wykorzystać . Poprzez uzupełniną przez Ciebie listę wydatków
+                jesteś w stanie przejrzeć na co tak naprawdę tracisz swoje pieniądze. Sejwer mobilizuje Cię do oszczędzania , pokazuje Twój postęp lub
+                ostrzega przed zbyt szybkim wydawaniem .Sejwer jest całkowicie darmowy. Sprawdź!
+
+            </h3>
+        </div>
+    </div>
+    <!--............................footer-->
+    <div class="seeMore">
+        <div class="seeMoreGroup">
+            <div class="seeMoreText">dowiedz się więcej</div>
+            <div class="seeMoreLine"></div>
+        </div>
+    </div>
+    <div class="footerLists">
+        <div class="footerYearLogo">&copy;2017 <img src="{{ asset('img/logo.png') }}" height="16px" width="auto"/></div>
+
+
+        <div class="footerIcons">
+            <img src="{{ asset('img/facebookIcon.png') }}" height="16px" width="auto"/>
+            <img src="{{ asset('img/youtubeIcon.png') }}" height="16px" width="auto"/>
+            <img src="{{ asset('img/twitterIcon.png') }}" height="16px" width="auto"/>
+        </div>
+        <div class="footerMore">
+            <div>więcej o nas</div>
+        </div>
+    </div>
+    <div class="break"></div>
+</div>
+<!--................................................login-->
+{#<div *ngIf='isShown' class="loginBackground">#}
+{#</div>#}
+{#<div *ngIf="isShownOn" class="loginPage">#}
+    {#<div class="loginPageSize">#}
+
+        {#<form (ngSubmit)="onSend()">#}
+            {#<label class="labelForm">login</label>#}
+            {#<input type="email"#}
+                   {#id="name"#}
+                   {#class="inputName"#}
+                   {#placeholder="e-mail"#}
+                   {#required#}
+                   {##emailLogin="ngModel"#}
+                   {#name="emailLogin"#}
+                   {#[(ngModel)]="loginUser.loginemail">#}
+            {#<div class="inputUndeline"></div>#}
+            {#<div#}
+                    {#class="alert"#}
+                    {#*ngIf="emailLogin.touched && !emailLogin.valid">#}
+                {#<div *ngIf="emailLogin.errors.required">#}
+                    {#adres e-mail jest wymagany#}
+                {#</div>#}
+            {#</div>#}
+
+            {#<input type="password"#}
+                   {#id="password"#}
+                   {#class="inputPassword"#}
+                   {#placeholder="hasło"#}
+                   {#required#}
+                   {##passwordLogin="ngModel"#}
+                   {#name="passwordLogin"#}
+                   {#[(ngModel)]="loginUser.loginpassword">#}
+            {#<div class="inputUndeline2"></div>#}
+            {#<div#}
+                    {#class="alert"#}
+                    {#*ngIf="passwordLogin.touched && !passwordLogin.valid">#}
+                {#<div *ngIf="passwordLogin.errors.required">#}
+                    {#hasło jest wymagane#}
+                {#</div>#}
+            {#</div>#}
+            {#<div class="registerAlert"></div>#}
+            {#<button#}
+                    {#type="submit" class="formButton" value="Submit">login</button>#}
+        {#</form>#}
+        {#<div class="nonUser">#}
+            {#<div class="nonAccount">nie masz konta?</div>&nbsp;#}
+            {#<button#}
+                    {#(click)="OnRegister()"#}
+                    {#class="goRegister">zarejestruj się!</button>#}
+        {#</div>#}
+        {#<div class="registerLine">#}
+            {#<div class="goRegisterUnderline"></div>#}
+        {#</div>#}
+    {#</div>#}
+    {#<!--.......................................................backButton-->#}
+    {#<div class="backButtonSize">#}
+        {#<button#}
+                {#(click)="onBack()"#}
+                {#class="backButton">wróć</button>#}
+    {#</div>#}
+{#</div>#}
+
+{#<!--..................................................................register-->#}
+{#<div *ngIf="isRegister" class="registerPage">#}
+    {#<div class="registerPageSize">#}
+
+        {#<form #f="ngForm" (ngSubmit)="onSubmit(f)">#}
+            {#<label class="labelForm">rejestracja</label>#}
+            {#<input#}
+                    {#type="email"#}
+                    {#class="form-control inputName"#}
+                    {#placeholder="e-mail"#}
+                    {#[(ngModel)]="registerUser.email"#}
+                    {##email="ngModel"#}
+                    {#name="email"#}
+                    {#required minlength="4"#}
+                    {#pattern="[^ @]*@[^ @]*">#}
+
+            {#<div class="inputUndeline"></div>#}
+            {#<div#}
+                    {#class="alert"#}
+                    {#*ngIf="email.touched && !email.valid">#}
+                {#<div *ngIf="email.errors.required">#}
+                    {#adres e-mail jest wymagany#}
+                {#</div>#}
+                {#<div *ngIf="email.errors.pattern">#}
+                    {#proszę wpisać poprawny adres e-mail#}
+                {#</div>#}
+                {#<div *ngIf="email.errors.minlength">#}
+                    {#adres e-mail nie może zawierać mniej niż 4 znaki#}
+                {#</div>#}
+            {#</div>#}
+
+
+            {#<input#}
+                    {#type="password"#}
+                    {#class="form-control inputPassword"#}
+                    {#placeholder="hasło"#}
+                    {#[(ngModel)]="registerUser.password"#}
+                    {#name="password"#}
+                    {##password="ngModel"#}
+                    {#required minlength="6">#}
+            {#<div class="inputUndeline2"></div>#}
+            {#<div#}
+                    {#class="alert"#}
+                    {#*ngIf="password.touched && !password.valid">#}
+                {#<div *ngIf="password.errors.required">#}
+                    {#wymagane hasło#}
+                {#</div>#}
+                {#<div *ngIf="password.errors.minlength">#}
+                    {#hasło musi zawierać minimalnie 6 znaków#}
+                {#</div>#}
+            {#</div>#}
+
+            {#<input#}
+                    {#type="password"#}
+                    {#id="form-control repeatPassword"#}
+                    {#class="inputPassword"#}
+                    {#placeholder="powtórz hasło"#}
+                    {#[(ngModel)]="registerUser.repeatpassword"#}
+                    {#name="repeatpassword"#}
+                    {##repeatpassword="ngModel"#}
+                    {#required >#}
+            {#<div class="inputUndeline2"></div>#}
+            {#<div class="alert"#}
+                 {#*ngIf="repeatpassword.dirty">#}
+                {#<div *ngIf="registerUser.repeatpassword != registerUser.password">#}
+                    {#hasła muszą być takie same#}
+                {#</div>#}
+            {#</div>#}
+
+
+            {#<!--........................................................-->#}
+            {#<div class="registerAlert"></div>#}
+
+            {#<button type="submit" class="formButton" value="Submit">register</button>#}
+        {#</form>#}
+
+        {#<!--<div class="registerLine">-->#}
+        {#<!--<div class="goRegisterUnderline"></div>-->#}
+        {#<!--</div>-->#}
+    {#</div>#}
+    {#<!--.......................................................backButton-->#}
+    {#<div class="backButtonSize">#}
+        {#<button#}
+                {#(click)="onBackRegister()"#}
+                {#class="backButton">wróć</button>#}
+    {#</div>#}
+{#</div>#}
+    {% endblock %}

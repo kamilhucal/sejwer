@@ -45,12 +45,12 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *               type="string"
      *          ),
      *          @SWG\Property(
-     *               property="createdAt",
+     *               property="created_at",
      *               type="string",
      *               format="date-time"
      *          ),
      *          @SWG\Property(
-     *               property="expiredAt",
+     *               property="expired_at",
      *               type="string",
      *               format="date-time"
      *          ),
@@ -60,11 +60,17 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *               format="boolean"
      *          )
      *      ),
-     *      examples={"application/json" : {"id":5, "value": 3500, "createdAt": "2017-09-10T21:06:20.113Z", "expiredAt": "2017-09-29    T21:12:20.113Z","isActive": true}}
+     *      examples={"application/json" : {"id":5, "value": 3500, "created_at": "2017-09-10T21:06:20.113Z", "expired_at": "2017-09-29    T21:12:20.113Z","isActive": true}}
      *  ),
      * @SWG\Response(
      *     response=204,
      *     description="Return empty array when no budgets found",
+     *  )
+     * @SWG\Response(
+     *     response=401,
+     *      @SWG\Header(header="WWW-Authenticate", type="string", description="first",default="Bearer"),
+     *     description="Invalid Token / Not Token",
+     *     examples={"application/json":{"code":401,"message":"Bad credentials"}}
      *  )
      * @SWG\Tag(name="budget")
      *
@@ -141,17 +147,17 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *               type="string"
      *          ),
      *          @SWG\Property(
-     *               property="createdAt",
+     *               property="created_at",
      *               type="string",
      *               format="date-time"
      *          ),
      *          @SWG\Property(
-     *               property="expiredAt",
+     *               property="expired_at",
      *               type="string",
      *               format="date-time"
      *          ),
      *      ),
-     *      examples={"application/json" : {"value":500, "name": "Name of the Budget", "expiredAt": {"year": 2017,"month":11,"day":5}, "createdAt": {"year": 2017,"month":12,"day":11}}}
+     *      examples={"application/json" : {"value":500, "name": "Name of the Budget", "expired_at": {"year": 2017,"month":11,"day":5}, "created_at": {"year": 2017,"month":12,"day":11}}}
      *  ),
      * @SWG\Response(
      *     response=406,
@@ -238,12 +244,12 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *          ),
      *          @SWG\Property(
      *            type="string",
-     *            property="createdAt",
+     *            property="created_at",
      *            enum={"year":"number","month":"number","day":"number"}
      *          ),
      *          @SWG\Property(
      *            type="string",
-     *            property="expiredAt",
+     *            property="expired_at",
      *            enum={"year":"number","month":"number","day":"number"}
      *          ),
      *     ),
@@ -265,23 +271,29 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *               type="string"
      *          ),
      *          @SWG\Property(
-     *               property="createdAt",
+     *               property="created_at",
      *               type="string",
      *               format="date-time"
      *          ),
      *          @SWG\Property(
-     *               property="expiredAt",
+     *               property="expired_at",
      *               type="string",
      *               format="date-time"
      *          ),
      *      ),
-     *      examples={"application/json" : {"id":6,"value":500, "name": "Name of the Budget", "expiredAt": {"year": 2017,"month":11,"day":5}, "createdAt": {"year": 2017,"month":12,"day":11}}}
+     *      examples={"application/json" : {"id":6,"value":500, "name": "Name of the Budget", "expired_at": {"year": 2017,"month":11,"day":5}, "created_at": {"year": 2017,"month":12,"day":11}}}
      *  )
      * @SWG\Response(
      *
      *     response=400,
      *     description="In case of nonexistent budget of requested ID, response with and error message",
      *     examples={"application/json":{"Active budget not found"}}
+     *  )
+     * @SWG\Response(
+     *     response=401,
+     *      @SWG\Header(header="WWW-Authenticate", type="string", description="first",default="Bearer"),
+     *     description="Invalid Token / Not Token",
+     *     examples={"application/json":{"code":401,"message":"Bad credentials"}}
      *  )
      * @SWG\Tag(name="budget"),
      */
@@ -324,17 +336,17 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *               type="string"
      *          ),
      *          @SWG\Property(
-     *               property="createdAt",
+     *               property="created_at",
      *               type="string",
      *               format="date-time"
      *          ),
      *          @SWG\Property(
-     *               property="expiredAt",
+     *               property="expired_at",
      *               type="string",
      *               format="date-time"
      *          ),
      *      ),
-     *      examples={"application/json" : {"id":6,"value":500, "name": "Name of the Budget", "expiredAt": {"year": 2017,"month":11,"day":5}, "createdAt": {"year": 2017,"month":12,"day":11}}}
+     *      examples={"application/json" : {"id":6,"value":500, "name": "Name of the Budget", "expired_at": {"year": 2017,"month":11,"day":5}, "created_at": {"year": 2017,"month":12,"day":11}}}
      *  )
      * @SWG\Response(
      *
@@ -348,6 +360,12 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *      in="path",
      *      description="Value of requested budget's Id.<br><br> Returns the budget only if <strong>logged user is its owner</strong>"
      *
+     *  )
+     * @SWG\Response(
+     *     response=401,
+     *      @SWG\Header(header="WWW-Authenticate", type="string", description="first",default="Bearer"),
+     *     description="Invalid Token / Not Token",
+     *     examples={"application/json":{"code":401,"message":"Bad credentials"}}
      *  )
      * @SWG\Tag(name="budget"),
      *
@@ -384,7 +402,7 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      * @SWG\Parameter(
      *     name="Budget Data",
      *     in="body",
-     *     description="Creates new budget",
+     *     description="Edit active budget",
      *     required=true,
      *     @SWG\Schema(
      *          @SWG\Property(
@@ -428,6 +446,12 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *      in="path",
      *      description="Value of requested budget's Id.<br><br> Returns the budget only if <strong>logged user is its owner</strong>"
      *
+     *  )
+     * @SWG\Response(
+     *     response=401,
+     *      @SWG\Header(header="WWW-Authenticate", type="string", description="first",default="Bearer"),
+     *     description="Invalid Token / Not Token",
+     *     examples={"application/json":{"code":401,"message":"Bad credentials"}}
      *  )
      * @SWG\Tag(name="budget"),
      *
@@ -493,6 +517,12 @@ class BudgetController extends FOSRestController implements ClassResourceInterfa
      *      in="path",
      *      description="Value of requested budget's Id.<br><br> Deletes the budget only if <strong>logged user is its owner</strong>"
      *
+     *  )
+     * @SWG\Response(
+     *     response=401,
+     *      @SWG\Header(header="WWW-Authenticate", type="string", description="first",default="Bearer"),
+     *     description="Invalid Token / Not Token",
+     *     examples={"application/json":{"code":401,"message":"Bad credentials"}}
      *  )
      * @SWG\Tag(name="budget"),
      *

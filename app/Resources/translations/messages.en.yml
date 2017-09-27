@@ -16,11 +16,14 @@ expenses:
 expense:
     not_found: 'No Expense of Id of'
     post:
-      unsuccessful: 'Formularz Niekompletny'
-    create: 'messages'
-    updated: 'messages'
-    deleted: 'messages'
-created: 'messages'
+      unsuccessful: 'Incomplete Form'
+    create: 'Expense has been created'
+    updated: 'Expense has been updated'
+    deleted: 'Expense has been deleted'
+created: 'created'
+user:
+  not:
+    exists: 'messages'
 
 
 

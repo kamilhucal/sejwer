@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User extends BaseUser
 {
 
-    public function __construct($budgets)
+    public function __construct()
     {
         $this->budgets = new ArrayCollection();
     }
@@ -45,10 +45,6 @@ class User extends BaseUser
         return $this->budgets;
     }
 
-    public function setId($id){
-        $this->id = $id;
-        return $this;
-    }
     /**
      * @Assert\IsTrue(message = "fos.user.email.matches_password")
      */

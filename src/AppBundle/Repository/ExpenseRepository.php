@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use AppBundle\Repository\BudgetRepository;
 
 /**
  * ExpenseRepository
@@ -12,5 +13,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class ExpenseRepository extends EntityRepository
 {
+
 
 }
