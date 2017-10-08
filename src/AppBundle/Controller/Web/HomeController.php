@@ -17,7 +17,7 @@ class HomeController extends Controller
         $translated = $this->get('translator')->trans('fos.user.email.matches_password');
 
 //        return new Response($translated);
-        return $this->render('index.hmt.twig');
+        return $this->render('index.hmtl.twig');
 
     }
 
