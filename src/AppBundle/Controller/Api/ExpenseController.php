@@ -165,7 +165,8 @@ class ExpenseController extends FOSRestController implements ClassResourceInterf
      * @SWG\Tag(name="expense"),
      *
      * @param  $id int
-     * @return View
+     *
+     * @return \FOS\RestBundle\View\View
      */
     public function getAction($id)
     {
@@ -266,6 +267,7 @@ class ExpenseController extends FOSRestController implements ClassResourceInterf
         if(!$form->isValid()){
             return $this->view($this->get('translator')->trans('expense.post.unsuccessful'). ': '. $form->getErrors(true), 400);
         }
+
         $activeBudget = $this->getBudgetRepository()->findByActiveBudgetAndByUser($this->getUser());
 
         if(!$activeBudget){
