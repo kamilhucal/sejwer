@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Api;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\ChangePasswordType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -11,7 +12,6 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Form\Type\ChangePasswordFormType;
 use FOS\UserBundle\FOSUserEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -208,6 +208,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function changePasswordAction(Request $request)
     {
+
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof User) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -222,8 +223,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
         if (null !== $event->getResponse()) {
             return $event->getResponse();
         }
-
-        $form = $this->createForm(ChangePasswordFormType::class, $user, ['csrf_protection' => false]);
+        $form = $this->createForm(ChangePasswordType::class, $user, ['csrf_protection' => false]);
 
         $form->submit($request->request->all());
 

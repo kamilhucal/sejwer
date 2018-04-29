@@ -38,6 +38,10 @@ services:
         class: AppBundle\Form\RegistrationType
         tags:
             - { name: form.type, alias: app_user_registration }
+    app.form.change_password:
+        class: AppBundle\Form\ChangePasswordType
+        tags:
+            - { name: form.type, alias: app_user_change_password }
     expiry.date_listener:
         class: AppBundle\EventListener\ExpiryDateListener
         tags:
